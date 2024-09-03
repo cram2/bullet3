@@ -30,7 +30,7 @@ typedef unsigned long long int smUint64_t;
 #endif
 
 #define SHARED_MEMORY_SERVER_TEST_C
-#define MAX_DEGREE_OF_FREEDOM 128
+#define MAX_DEGREE_OF_FREEDOM 512
 #define MAX_NUM_SENSORS 256
 #define MAX_URDF_FILENAME_LENGTH 1024
 #define MAX_SDF_FILENAME_LENGTH 1024
@@ -169,7 +169,7 @@ enum EnumChangeDynamicsInfoFlags
 	CHANGE_DYNAMICS_INFO_SET_ACTIVATION_STATE = 8192,
 	CHANGE_DYNAMICS_INFO_SET_JOINT_DAMPING = 16384,
 	CHANGE_DYNAMICS_INFO_SET_ANISOTROPIC_FRICTION = 32768,
-	CHANGE_DYNAMICS_INFO_SET_MAX_JOINT_VELOCITY = 1<<16,	
+	CHANGE_DYNAMICS_INFO_SET_MAX_JOINT_VELOCITY = 1<<16,
 	CHANGE_DYNAMICS_INFO_SET_COLLISION_MARGIN = 1 << 17,
 	CHANGE_DYNAMICS_INFO_SET_JOINT_LIMITS = 1 << 18,
 	CHANGE_DYNAMICS_INFO_SET_JOINT_LIMIT_MAX_FORCE = 1 << 19,
@@ -200,11 +200,11 @@ struct ChangeDynamicsInfoArgs
 	double m_anisotropicFriction[3];
 	double m_maxJointVelocity;
 	double m_collisionMargin;
-	
+
 	double m_jointLowerLimit;
 	double m_jointUpperLimit;
 	double m_jointLimitForce;
-	
+
 	int m_dynamicType;
 
 	double m_sleepThreshold;

@@ -1,6 +1,8 @@
 [![Travis Build Status](https://api.travis-ci.org/bulletphysics/bullet3.png?branch=master)](https://travis-ci.org/bulletphysics/bullet3)
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/6sly9uxajr6xsstq)](https://ci.appveyor.com/project/erwincoumans/bullet3)
 
+**This Fork changes the maximum allowed number of Links of a URDF** 
+
 # Bullet Physics SDK
 
 This is the official C++ source code repository of the Bullet Physics SDK: real-time collision detection and multi-physics simulation for VR, games, visual effects, robotics, machine learning etc.
@@ -35,7 +37,7 @@ year = {2016--2021}
 ## Requirements for Bullet Physics C++
 
 A C++ compiler for C++ 2003. The library is tested on Windows, Linux, Mac OSX, iOS, Android,
-but should likely work on any platform with C++ compiler. 
+but should likely work on any platform with C++ compiler.
 Some optional demos require OpenGL 2 or OpenGL 3, there are some non-graphical demos and unit tests too.
 
 ## Contributors and Coding Style information
@@ -118,9 +120,9 @@ make
 Note that on Linux, you need to use cmake to build pybullet, since the compiler has issues of mixing shared and static libraries.
 
 **Mac OSX Xcode**
-	
+
 Click on build3/xcode4.command or in a terminal window execute
-```	
+```
 ./premake_osx xcode4
 ```
 ## Usage
