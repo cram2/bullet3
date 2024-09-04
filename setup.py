@@ -509,10 +509,10 @@ setup(
     description=
     'Official Python Interface for the Bullet Physics SDK specialized for Robotics Simulation and Reinforcement Learning',
     long_description=
-    'pycram_bullet is an easy to use Python module for physics simulation, robotics and deep reinforcement learning based on the Bullet Physics SDK. With pycram_bullet you can load articulated bodies from URDF, SDF and other file formats. pycram_bullet provides forward dynamics simulation, inverse dynamics computation, forward and inverse kinematics and collision detection and ray intersection queries. Aside from physics simulation, pycram_bullet supports to rendering, with a CPU renderer and OpenGL visualization and support for virtual reality headsets. \n This is a fork of the official PyBullet project, with the purpose of allowing to spawn a URDF with more than 128 Links.',
-    url='https://github.com/bulletphysics/bullet3',
-    author='Erwin Coumans, Yunfei Bai, Jasmine Hsu',
-    author_email='erwincoumans@google.com',
+    'pycram_bullet is an easy to use Python module for physics simulation, robotics and deep reinforcement learning based on the Bullet Physics SDK. With pycram_bullet you can load articulated bodies from URDF, SDF and other file formats. pycram_bullet provides forward dynamics simulation, inverse dynamics computation, forward and inverse kinematics and collision detection and ray intersection queries. Aside from physics simulation, pycram_bullet supports to rendering, with a CPU renderer and OpenGL visualization and support for virtual reality headsets. \n This is a fork of the official PyBullet project (https://github.com/bulletphysics/bullet3), with the purpose of allowing to spawn a URDF with more than 128 Links.',
+    url='https://github.com/cram2/bullet3',
+    author='Jonas Dech',
+    author_email='pycram@informatik.uni-bremen.de',
     license='zlib',
     platforms='any',
     keywords=[
