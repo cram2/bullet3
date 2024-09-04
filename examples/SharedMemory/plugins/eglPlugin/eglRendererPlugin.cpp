@@ -9,7 +9,7 @@
 
 //eglRenderer plugin
 
-//see Bullet/examples/pybullet/examples/eglRendererTest.py
+//see Bullet/examples/pycram_bullet/examples/eglRendererTest.py
 
 #include "eglRendererPlugin.h"
 #include "eglRendererVisualShapeConverter.h"

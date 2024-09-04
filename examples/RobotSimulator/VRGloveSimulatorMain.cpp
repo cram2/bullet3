@@ -1,4 +1,4 @@
-//VR Glove hand simulator is a C++ conversion from the Python pybullet vrhand_vive_tracker.py
+//VR Glove hand simulator is a C++ conversion from the Python pycram_bullet vrhand_vive_tracker.py
 //For more details about the VR glove, see also https://docs.google.com/document/d/1_qwXJRBTGKmhktdBtVQ6zdOdxwud1K30jt0G5dkAr10/edit
 
 #include "b3RobotSimulatorClientAPI.h"

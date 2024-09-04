@@ -1,6 +1,6 @@
 		
 
-project ("pybullet_vrSyncPlugin")
+project ("pycram_bullet_vrSyncPlugin")
 		language "C++"
 		kind "SharedLib"
 		

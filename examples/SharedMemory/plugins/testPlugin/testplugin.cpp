@@ -2,9 +2,9 @@
 //test plugin, can load a URDF file, example usage on a Windows machine:
 
 /*
-import pybullet as p
+import pycram_bullet as p
 p.connect(p.GUI)
-pluginUid = p.loadPlugin("E:/develop/bullet3/bin/pybullet_testplugin_vs2010_x64_debug.dll")
+pluginUid = p.loadPlugin("E:/develop/bullet3/bin/pycram_bullet_testplugin_vs2010_x64_debug.dll")
 commandUid = 0
 argument = "plane.urdf"
 p.executePluginCommand(pluginUid,commandUid,argument)

@@ -4,18 +4,18 @@
 
 #include "../PhysicsClientC_API.h"
 
-namespace pybullet_grpc
+namespace pycram_bullet_grpc
 {
 class PyBulletCommand;
 class PyBulletStatus;
-};  // namespace pybullet_grpc
+};  // namespace pycram_bullet_grpc
 
-struct SharedMemoryCommand* convertGRPCToBulletCommand(const pybullet_grpc::PyBulletCommand& grpcCommand, struct SharedMemoryCommand& cmd);
+struct SharedMemoryCommand* convertGRPCToBulletCommand(const pycram_bullet_grpc::PyBulletCommand& grpcCommand, struct SharedMemoryCommand& cmd);
 
-pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMemoryCommand& clientCmd, pybullet_grpc::PyBulletCommand& grpcCommand);
+pycram_bullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMemoryCommand& clientCmd, pycram_bullet_grpc::PyBulletCommand& grpcCommand);
 
-bool convertGRPCToStatus(const pybullet_grpc::PyBulletStatus& grpcReply, struct SharedMemoryStatus& serverStatus, char* bufferServerToClient, int bufferSizeInBytes);
+bool convertGRPCToStatus(const pycram_bullet_grpc::PyBulletStatus& grpcReply, struct SharedMemoryStatus& serverStatus, char* bufferServerToClient, int bufferSizeInBytes);
 
-bool convertStatusToGRPC(const struct SharedMemoryStatus& serverStatus, char* bufferServerToClient, int bufferSizeInBytes, pybullet_grpc::PyBulletStatus& grpcReply);
+bool convertStatusToGRPC(const struct SharedMemoryStatus& serverStatus, char* bufferServerToClient, int bufferSizeInBytes, pycram_bullet_grpc::PyBulletStatus& grpcReply);
 
 #endif  //BT_CONVERT_GRPC_BULLET_H

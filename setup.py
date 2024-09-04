@@ -100,7 +100,7 @@ else:
     print("numpy_include_dirs = %s" % d)
   include_dirs += NP_DIRS
 
-sources = ["examples/pybullet/pybullet.c"]\
+sources = ["examples/pycram_bullet/pycram_bullet.c"]\
 +["examples/ThirdPartyLibs/tinyxml2/tinyxml2.cpp"]\
 +["examples/SharedMemory/plugins/stablePDPlugin/BulletConversion.cpp"]\
 +["examples/SharedMemory/plugins/stablePDPlugin/KinTree.cpp"]\
@@ -456,7 +456,7 @@ else:
 setup_py_dir = os.path.dirname(os.path.realpath(__file__))
 
 need_files = []
-datadir = "examples/pybullet/gym/pybullet_data"
+datadir = "examples/pycram_bullet/gym/pycram_bullet_data"
 
 hh = setup_py_dir + "/" + datadir
 
@@ -472,13 +472,13 @@ print("found resource files: %i" % len(need_files))
 for n in need_files:
   print("-- %s" % n)
 print("packages")
-print(find_packages('examples/pybullet/gym'))
+print(find_packages('examples/pycram_bullet/gym'))
 print("-----")
 
 extensions = []
 
-pybullet_ext = Extension(
-    "pybullet",
+pycram_bullet_ext = Extension(
+    "pycram_bullet",
     sources=sources,
     libraries=libraries,
     extra_compile_args=CXX_FLAGS.split(),
@@ -487,7 +487,7 @@ pybullet_ext = Extension(
         "examples/ThirdPartyLibs/enet/include", "examples/ThirdPartyLibs/clsocket/src",
         "Extras/VHACD/inc", "Extras/VHACD/public",
     ])
-extensions.append(pybullet_ext)
+extensions.append(pycram_bullet_ext)
 
 if 'BT_USE_EGL' in EGL_CXX_FLAGS:
 
@@ -504,12 +504,12 @@ if 'BT_USE_EGL' in EGL_CXX_FLAGS:
   extensions.append(eglRender)
 
 setup(
-    name='pybullet',
+    name='pycram_bullet',
     version='3.2.5',
     description=
     'Official Python Interface for the Bullet Physics SDK specialized for Robotics Simulation and Reinforcement Learning',
     long_description=
-    'pybullet is an easy to use Python module for physics simulation, robotics and deep reinforcement learning based on the Bullet Physics SDK. With pybullet you can load articulated bodies from URDF, SDF and other file formats. pybullet provides forward dynamics simulation, inverse dynamics computation, forward and inverse kinematics and collision detection and ray intersection queries. Aside from physics simulation, pybullet supports to rendering, with a CPU renderer and OpenGL visualization and support for virtual reality headsets.',
+    'pycram_bullet is an easy to use Python module for physics simulation, robotics and deep reinforcement learning based on the Bullet Physics SDK. With pycram_bullet you can load articulated bodies from URDF, SDF and other file formats. pycram_bullet provides forward dynamics simulation, inverse dynamics computation, forward and inverse kinematics and collision detection and ray intersection queries. Aside from physics simulation, pycram_bullet supports to rendering, with a CPU renderer and OpenGL visualization and support for virtual reality headsets.',
     url='https://github.com/bulletphysics/bullet3',
     author='Erwin Coumans, Yunfei Bai, Jasmine Hsu',
     author_email='erwincoumans@google.com',
@@ -532,6 +532,6 @@ setup(
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Framework :: Robot Framework'
     ],
-    package_dir={'': 'examples/pybullet/gym'},
-    packages=[x for x in find_packages('examples/pybullet/gym')],
-    package_data={'pybullet_data': need_files})
+    package_dir={'': 'examples/pycram_bullet/gym'},
+    packages=[x for x in find_packages('examples/pycram_bullet/gym')],
+    package_data={'pycram_bullet_data': need_files})

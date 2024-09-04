@@ -2125,7 +2125,7 @@ void MyContactEndedCallback(btPersistentManifold* const& manifold)
 void PhysicsServerCommandProcessor::processCollisionForces(btScalar timeStep)
 {
 #ifdef B3_ENABLE_TINY_AUDIO
-	//this is experimental at the moment: impulse thresholds, sound parameters will be exposed in C-API/pybullet.
+	//this is experimental at the moment: impulse thresholds, sound parameters will be exposed in C-API/pycram_bullet.
 	//audio will go into a wav file, as well as real-time output to speakers/headphones using RtAudio/DAC.
 
 	int numContactManifolds = m_data->m_dynamicsWorld->getDispatcher()->getNumManifolds();
@@ -3377,7 +3377,7 @@ bool PhysicsServerCommandProcessor::processImportedObjects(const char* fileName,
 #if 0
 			btAlignedObjectArray<char> urdf;
 			mb->dumpUrdf(urdf);
-			FILE* f = fopen("e:/pybullet.urdf", "w");
+			FILE* f = fopen("e:/pycram_bullet.urdf", "w");
 			if (f)
 			{
 				fwrite(&urdf[0], urdf.size(), 1, f);
@@ -4381,7 +4381,7 @@ bool PhysicsServerCommandProcessor::processSaveWorldCommand(const struct SharedM
 		{
 			char line[2048];
 			{
-				sprintf(line, "import pybullet as p\n");
+				sprintf(line, "import pycram_bullet as p\n");
 				int len = strlen(line);
 				fwrite(line, len, 1, f);
 			}

@@ -7,7 +7,7 @@
 #include <thread>
 #include <grpc++/grpc++.h>
 #include <grpc/support/log.h>
-#include "SharedMemory/grpc/proto/pybullet.grpc.pb.h"
+#include "SharedMemory/grpc/proto/pycram_bullet.grpc.pb.h"
 #include "LinearMath/btMinMax.h"
 
 #define ALLOW_GRPC_COMMAND_CONVERSION
@@ -19,12 +19,12 @@ using grpc::ServerBuilder;
 using grpc::ServerCompletionQueue;
 using grpc::ServerContext;
 using grpc::Status;
-using pybullet_grpc::PyBulletCommand;
-using pybullet_grpc::PyBulletStatus;
+using pycram_bullet_grpc::PyBulletCommand;
+using pycram_bullet_grpc::PyBulletStatus;
 
-pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMemoryCommand& clientCmd, pybullet_grpc::PyBulletCommand& grpcCommand)
+pycram_bullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMemoryCommand& clientCmd, pycram_bullet_grpc::PyBulletCommand& grpcCommand)
 {
-	pybullet_grpc::PyBulletCommand* grpcCmdPtr = 0;
+	pycram_bullet_grpc::PyBulletCommand* grpcCmdPtr = 0;
 
 	grpcCommand.set_commandtype(clientCmd.m_type);
 
@@ -44,7 +44,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 		case CMD_USER_CONSTRAINT:
 		{
 			grpcCmdPtr = &grpcCommand;
-			::pybullet_grpc::UserConstraintCommand* con = grpcCommand.mutable_userconstraintcommand();
+			::pycram_bullet_grpc::UserConstraintCommand* con = grpcCommand.mutable_userconstraintcommand();
 
 			con->set_updateflags(clientCmd.m_updateFlags);
 			con->mutable_childframe()->mutable_origin()->set_x(clientCmd.m_userConstraintArguments.m_childFrame[0]);
@@ -106,7 +106,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 
 		case CMD_LOAD_URDF:
 		{
-			::pybullet_grpc::LoadUrdfCommand* urdfCmd = grpcCommand.mutable_loadurdfcommand();
+			::pycram_bullet_grpc::LoadUrdfCommand* urdfCmd = grpcCommand.mutable_loadurdfcommand();
 			grpcCmdPtr = &grpcCommand;
 			urdfCmd->set_filename(clientCmd.m_urdfArguments.m_urdfFileName);
 			if (clientCmd.m_updateFlags & URDF_ARGS_INITIAL_POSITION)
@@ -146,7 +146,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 		case CMD_INIT_POSE:
 		{
 			grpcCmdPtr = &grpcCommand;
-			::pybullet_grpc::InitPoseCommand* pose = grpcCommand.mutable_initposecommand();
+			::pycram_bullet_grpc::InitPoseCommand* pose = grpcCommand.mutable_initposecommand();
 			{
 				pose->set_bodyuniqueid(clientCmd.m_initPoseArgs.m_bodyUniqueId);
 				pose->set_updateflags(clientCmd.m_updateFlags);
@@ -178,7 +178,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 		{
 			grpcCmdPtr = &grpcCommand;
 
-			::pybullet_grpc::RequestActualStateCommand* grpcCmd = grpcCommand.mutable_requestactualstatecommand();
+			::pycram_bullet_grpc::RequestActualStateCommand* grpcCmd = grpcCommand.mutable_requestactualstatecommand();
 			grpcCmd->set_bodyuniqueid(clientCmd.m_requestActualStateInformationCommandArgument.m_bodyUniqueId);
 			if (clientCmd.m_updateFlags & ACTUAL_STATE_COMPUTE_FORWARD_KINEMATICS)
 			{
@@ -193,7 +193,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 
 		case CMD_SEND_DESIRED_STATE:
 		{
-			::pybullet_grpc::JointMotorControlCommand* motor = grpcCommand.mutable_jointmotorcontrolcommand();
+			::pycram_bullet_grpc::JointMotorControlCommand* motor = grpcCommand.mutable_jointmotorcontrolcommand();
 			motor->set_bodyuniqueid(clientCmd.m_sendDesiredStateCommandArgument.m_bodyUniqueId);
 			motor->set_controlmode(clientCmd.m_sendDesiredStateCommandArgument.m_controlMode);
 			motor->set_updateflags(clientCmd.m_updateFlags);
@@ -224,9 +224,9 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 		case CMD_SEND_PHYSICS_SIMULATION_PARAMETERS:
 		{
 			grpcCmdPtr = &grpcCommand;
-			::pybullet_grpc::PhysicsSimulationParametersCommand* grpcCmd = grpcCommand.mutable_setphysicssimulationparameterscommand();
+			::pycram_bullet_grpc::PhysicsSimulationParametersCommand* grpcCmd = grpcCommand.mutable_setphysicssimulationparameterscommand();
 			grpcCmd->set_updateflags(clientCmd.m_updateFlags);
-			::pybullet_grpc::PhysicsSimulationParameters* params = grpcCmd->mutable_params();
+			::pycram_bullet_grpc::PhysicsSimulationParameters* params = grpcCmd->mutable_params();
 
 			if (clientCmd.m_updateFlags & SIM_PARAM_UPDATE_DELTA_TIME)
 			{
@@ -234,7 +234,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 			}
 			if (clientCmd.m_updateFlags & SIM_PARAM_UPDATE_GRAVITY)
 			{
-				::pybullet_grpc::vec3* grav = params->mutable_gravityacceleration();
+				::pycram_bullet_grpc::vec3* grav = params->mutable_gravityacceleration();
 				grav->set_x(clientCmd.m_physSimParamArgs.m_gravityAcceleration[0]);
 				grav->set_y(clientCmd.m_physSimParamArgs.m_gravityAcceleration[1]);
 				grav->set_z(clientCmd.m_physSimParamArgs.m_gravityAcceleration[2]);
@@ -347,7 +347,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 		case CMD_REQUEST_BODY_INFO:
 		{
 			grpcCmdPtr = &grpcCommand;
-			::pybullet_grpc::RequestBodyInfoCommand* grpcCmd = grpcCommand.mutable_requestbodyinfocommand();
+			::pycram_bullet_grpc::RequestBodyInfoCommand* grpcCmd = grpcCommand.mutable_requestbodyinfocommand();
 			grpcCmd->set_bodyuniqueid(clientCmd.m_sdfRequestInfoArgs.m_bodyUniqueId);
 			break;
 		}
@@ -372,7 +372,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 		case CMD_CONFIGURE_OPENGL_VISUALIZER:
 		{
 			grpcCmdPtr = &grpcCommand;
-			::pybullet_grpc::ConfigureOpenGLVisualizerCommand* vizCmd = grpcCommand.mutable_configureopenglvisualizercommand();
+			::pycram_bullet_grpc::ConfigureOpenGLVisualizerCommand* vizCmd = grpcCommand.mutable_configureopenglvisualizercommand();
 
 			vizCmd->set_updateflags(clientCmd.m_updateFlags);
 			vizCmd->set_cameradistance(clientCmd.m_configureOpenGLVisualizerArguments.m_cameraDistance);
@@ -380,7 +380,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 			vizCmd->set_camerayaw(clientCmd.m_configureOpenGLVisualizerArguments.m_cameraYaw);
 			vizCmd->set_setflag(clientCmd.m_configureOpenGLVisualizerArguments.m_setFlag);
 			vizCmd->set_setenabled(clientCmd.m_configureOpenGLVisualizerArguments.m_setEnabled);
-			::pybullet_grpc::vec3* targetPos = vizCmd->mutable_cameratargetposition();
+			::pycram_bullet_grpc::vec3* targetPos = vizCmd->mutable_cameratargetposition();
 			targetPos->set_x(clientCmd.m_configureOpenGLVisualizerArguments.m_cameraTargetPosition[0]);
 			targetPos->set_y(clientCmd.m_configureOpenGLVisualizerArguments.m_cameraTargetPosition[1]);
 			targetPos->set_z(clientCmd.m_configureOpenGLVisualizerArguments.m_cameraTargetPosition[2]);
@@ -390,7 +390,7 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 		case CMD_REQUEST_CAMERA_IMAGE_DATA:
 		{
 			grpcCmdPtr = &grpcCommand;
-			::pybullet_grpc::RequestCameraImageCommand* cam = grpcCommand.mutable_requestcameraimagecommand();
+			::pycram_bullet_grpc::RequestCameraImageCommand* cam = grpcCommand.mutable_requestcameraimagecommand();
 
 			cam->set_updateflags(clientCmd.m_updateFlags);
 			cam->set_startpixelindex(clientCmd.m_requestPixelDataArguments.m_startPixelIndex);
@@ -428,14 +428,14 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 
 			if (clientCmd.m_updateFlags & REQUEST_PIXEL_ARGS_SET_LIGHT_COLOR)
 			{
-				::pybullet_grpc::vec3* lightColor = cam->mutable_lightcolor();
+				::pycram_bullet_grpc::vec3* lightColor = cam->mutable_lightcolor();
 				lightColor->set_x(clientCmd.m_requestPixelDataArguments.m_lightColor[0]);
 				lightColor->set_y(clientCmd.m_requestPixelDataArguments.m_lightColor[1]);
 				lightColor->set_z(clientCmd.m_requestPixelDataArguments.m_lightColor[2]);
 			}
 			if (clientCmd.m_updateFlags & REQUEST_PIXEL_ARGS_SET_LIGHT_DIRECTION)
 			{
-				::pybullet_grpc::vec3* lightDir = cam->mutable_lightdirection();
+				::pycram_bullet_grpc::vec3* lightDir = cam->mutable_lightdirection();
 				lightDir->set_x(clientCmd.m_requestPixelDataArguments.m_lightDirection[0]);
 				lightDir->set_y(clientCmd.m_requestPixelDataArguments.m_lightDirection[1]);
 				lightDir->set_z(clientCmd.m_requestPixelDataArguments.m_lightDirection[2]);
@@ -443,8 +443,8 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 
 			if (clientCmd.m_updateFlags & REQUEST_PIXEL_ARGS_HAS_CAMERA_MATRICES)
 			{
-				::pybullet_grpc::matrix4x4* projMat = cam->mutable_projectionmatrix();
-				::pybullet_grpc::matrix4x4* viewMat = cam->mutable_viewmatrix();
+				::pycram_bullet_grpc::matrix4x4* projMat = cam->mutable_projectionmatrix();
+				::pycram_bullet_grpc::matrix4x4* viewMat = cam->mutable_viewmatrix();
 				for (int i = 0; i < 16; i++)
 				{
 					projMat->add_elems(clientCmd.m_requestPixelDataArguments.m_projectionMatrix[i]);
@@ -454,8 +454,8 @@ pybullet_grpc::PyBulletCommand* convertBulletToGRPCCommand(const struct SharedMe
 
 			if (clientCmd.m_updateFlags & REQUEST_PIXEL_ARGS_HAS_PROJECTIVE_TEXTURE_MATRICES)
 			{
-				::pybullet_grpc::matrix4x4* projectiveProjMat = cam->mutable_projectivetextureprojectionmatrix();
-				::pybullet_grpc::matrix4x4* projectiveViewMat = cam->mutable_projectivetextureviewmatrix();
+				::pycram_bullet_grpc::matrix4x4* projectiveProjMat = cam->mutable_projectivetextureprojectionmatrix();
+				::pycram_bullet_grpc::matrix4x4* projectiveViewMat = cam->mutable_projectivetextureviewmatrix();
 				for (int i = 0; i < 16; i++)
 				{
 					projectiveProjMat->add_elems(clientCmd.m_requestPixelDataArguments.m_projectiveTextureProjectionMatrix[i]);
@@ -584,7 +584,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				cmdPtr = &cmd;
 				b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
 
-				const ::pybullet_grpc::UserConstraintCommand* con = &grpcCommand.userconstraintcommand();
+				const ::pycram_bullet_grpc::UserConstraintCommand* con = &grpcCommand.userconstraintcommand();
 
 				clientCmd.m_updateFlags = con->updateflags();
 				clientCmd.m_userConstraintArguments.m_childFrame[0] = con->childframe().origin().x();
@@ -652,7 +652,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				btAssert(grpcCommand.has_loadurdfcommand());
 				if (grpcCommand.has_loadurdfcommand())
 				{
-					const ::pybullet_grpc::LoadUrdfCommand& grpcCmd = grpcCommand.loadurdfcommand();
+					const ::pycram_bullet_grpc::LoadUrdfCommand& grpcCmd = grpcCommand.loadurdfcommand();
 
 					std::string fileName = grpcCmd.filename();
 					if (fileName.length())
@@ -663,23 +663,23 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 
 						if (grpcCmd.has_initialposition())
 						{
-							const ::pybullet_grpc::vec3& pos = grpcCmd.initialposition();
+							const ::pycram_bullet_grpc::vec3& pos = grpcCmd.initialposition();
 							b3LoadUrdfCommandSetStartPosition(commandHandle, pos.x(), pos.y(), pos.z());
 						}
 						if (grpcCmd.has_initialorientation())
 						{
-							const ::pybullet_grpc::quat4& orn = grpcCmd.initialorientation();
+							const ::pycram_bullet_grpc::quat4& orn = grpcCmd.initialorientation();
 							b3LoadUrdfCommandSetStartOrientation(commandHandle, orn.x(), orn.y(), orn.z(), orn.w());
 						}
-						if (grpcCmd.hasUseMultiBody_case() == ::pybullet_grpc::LoadUrdfCommand::HasUseMultiBodyCase::kUseMultiBody)
+						if (grpcCmd.hasUseMultiBody_case() == ::pycram_bullet_grpc::LoadUrdfCommand::HasUseMultiBodyCase::kUseMultiBody)
 						{
 							b3LoadUrdfCommandSetUseMultiBody(commandHandle, grpcCmd.usemultibody());
 						}
-						if (grpcCmd.hasGlobalScaling_case() == ::pybullet_grpc::LoadUrdfCommand::HasGlobalScalingCase::kGlobalScaling)
+						if (grpcCmd.hasGlobalScaling_case() == ::pycram_bullet_grpc::LoadUrdfCommand::HasGlobalScalingCase::kGlobalScaling)
 						{
 							b3LoadUrdfCommandSetGlobalScaling(commandHandle, grpcCmd.globalscaling());
 						}
-						if (grpcCmd.hasUseFixedBase_case() == ::pybullet_grpc::LoadUrdfCommand::HasUseFixedBaseCase::kUseFixedBase)
+						if (grpcCmd.hasUseFixedBase_case() == ::pycram_bullet_grpc::LoadUrdfCommand::HasUseFixedBaseCase::kUseFixedBase)
 						{
 							b3LoadUrdfCommandSetUseFixedBase(commandHandle, grpcCmd.usefixedbase());
 						}
@@ -700,7 +700,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 					cmdPtr = &cmd;
 					b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
 
-					const ::pybullet_grpc::InitPoseCommand& grpcCmd = grpcCommand.initposecommand();
+					const ::pycram_bullet_grpc::InitPoseCommand& grpcCmd = grpcCommand.initposecommand();
 					b3CreatePoseCommandInit2(commandHandle, grpcCmd.bodyuniqueid());
 					cmd.m_updateFlags = grpcCmd.updateflags();
 					double initialQ[MAX_DEGREE_OF_FREEDOM] = {0};
@@ -753,7 +753,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				{
 					cmdPtr = &cmd;
 					b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
-					const ::pybullet_grpc::RequestActualStateCommand& grpcCmd = grpcCommand.requestactualstatecommand();
+					const ::pycram_bullet_grpc::RequestActualStateCommand& grpcCmd = grpcCommand.requestactualstatecommand();
 					b3RequestActualStateCommandInit2(commandHandle, grpcCmd.bodyuniqueid());
 					if (grpcCmd.computeforwardkinematics())
 					{
@@ -772,7 +772,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				cmdPtr = &cmd;
 				b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
 
-				const ::pybullet_grpc::JointMotorControlCommand* motor = &grpcCommand.jointmotorcontrolcommand();
+				const ::pycram_bullet_grpc::JointMotorControlCommand* motor = &grpcCommand.jointmotorcontrolcommand();
 				b3JointControlCommandInit2Internal(commandHandle, motor->bodyuniqueid(), motor->controlmode());
 
 				int maxQ = motor->hasdesiredstateflags_size();
@@ -815,7 +815,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				b3InitPhysicsParamCommand2(commandHandle);
 
 				int updateFlags = grpcCommand.setphysicssimulationparameterscommand().updateflags();
-				const ::pybullet_grpc::PhysicsSimulationParameters* params = &grpcCommand.setphysicssimulationparameterscommand().params();
+				const ::pycram_bullet_grpc::PhysicsSimulationParameters* params = &grpcCommand.setphysicssimulationparameterscommand().params();
 
 				if (updateFlags & SIM_PARAM_UPDATE_DELTA_TIME)
 				{
@@ -823,7 +823,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				}
 				if (updateFlags & SIM_PARAM_UPDATE_GRAVITY)
 				{
-					const ::pybullet_grpc::vec3* grav = &params->gravityacceleration();
+					const ::pycram_bullet_grpc::vec3* grav = &params->gravityacceleration();
 					b3PhysicsParamSetGravity(commandHandle, grav->x(), grav->y(), grav->z());
 				}
 
@@ -966,7 +966,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				{
 					cmdPtr = &cmd;
 					b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
-					const ::pybullet_grpc::ConfigureOpenGLVisualizerCommand& grpcCmd = grpcCommand.configureopenglvisualizercommand();
+					const ::pycram_bullet_grpc::ConfigureOpenGLVisualizerCommand& grpcCmd = grpcCommand.configureopenglvisualizercommand();
 
 					b3InitConfigureOpenGLVisualizer2(commandHandle);
 					cmd.m_updateFlags = grpcCmd.updateflags();
@@ -988,7 +988,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
 				SharedMemoryCommand& clientCmd = cmd;
 
-				const ::pybullet_grpc::RequestCameraImageCommand* cam = &grpcCommand.requestcameraimagecommand();
+				const ::pycram_bullet_grpc::RequestCameraImageCommand* cam = &grpcCommand.requestcameraimagecommand();
 
 				b3InitRequestCameraImage2(commandHandle);
 				clientCmd.m_updateFlags = cam->updateflags();
@@ -1027,14 +1027,14 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 
 				if (clientCmd.m_updateFlags & REQUEST_PIXEL_ARGS_SET_LIGHT_COLOR)
 				{
-					const ::pybullet_grpc::vec3* lightColor = &cam->lightcolor();
+					const ::pycram_bullet_grpc::vec3* lightColor = &cam->lightcolor();
 					clientCmd.m_requestPixelDataArguments.m_lightColor[0] = lightColor->x();
 					clientCmd.m_requestPixelDataArguments.m_lightColor[1] = lightColor->y();
 					clientCmd.m_requestPixelDataArguments.m_lightColor[2] = lightColor->z();
 				}
 				if (clientCmd.m_updateFlags & REQUEST_PIXEL_ARGS_SET_LIGHT_DIRECTION)
 				{
-					const ::pybullet_grpc::vec3* lightDir = &cam->lightdirection();
+					const ::pycram_bullet_grpc::vec3* lightDir = &cam->lightdirection();
 					clientCmd.m_requestPixelDataArguments.m_lightDirection[0] = lightDir->x();
 					clientCmd.m_requestPixelDataArguments.m_lightDirection[1] = lightDir->y();
 					clientCmd.m_requestPixelDataArguments.m_lightDirection[2] = lightDir->z();
@@ -1042,8 +1042,8 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 
 				if (clientCmd.m_updateFlags & REQUEST_PIXEL_ARGS_HAS_CAMERA_MATRICES)
 				{
-					const ::pybullet_grpc::matrix4x4* projMat = &cam->projectionmatrix();
-					const ::pybullet_grpc::matrix4x4* viewMat = &cam->viewmatrix();
+					const ::pycram_bullet_grpc::matrix4x4* projMat = &cam->projectionmatrix();
+					const ::pycram_bullet_grpc::matrix4x4* viewMat = &cam->viewmatrix();
 					for (int i = 0; i < 16; i++)
 					{
 						clientCmd.m_requestPixelDataArguments.m_projectionMatrix[i] = projMat->elems(i);
@@ -1053,8 +1053,8 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 
 				if (clientCmd.m_updateFlags & REQUEST_PIXEL_ARGS_HAS_PROJECTIVE_TEXTURE_MATRICES)
 				{
-					const ::pybullet_grpc::matrix4x4* projectiveProjMat = &cam->projectivetextureprojectionmatrix();
-					const ::pybullet_grpc::matrix4x4* projectiveViewMat = &cam->projectivetextureviewmatrix();
+					const ::pycram_bullet_grpc::matrix4x4* projectiveProjMat = &cam->projectivetextureprojectionmatrix();
+					const ::pycram_bullet_grpc::matrix4x4* projectiveViewMat = &cam->projectivetextureviewmatrix();
 					for (int i = 0; i < 16; i++)
 					{
 						clientCmd.m_requestPixelDataArguments.m_projectiveTextureProjectionMatrix[i] = projectiveProjMat->elems(i);
@@ -1072,7 +1072,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				btAssert(grpcCommand.has_loadsdfcommand());
 				if (grpcCommand.has_loadsdfcommand())
 				{
-					const ::pybullet_grpc::LoadSdfCommand& grpcCmd = grpcCommand.loadsdfcommand();
+					const ::pycram_bullet_grpc::LoadSdfCommand& grpcCmd = grpcCommand.loadsdfcommand();
 
 					std::string fileName = grpcCmd.filename();
 					if (fileName.length())
@@ -1081,11 +1081,11 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 						b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
 						b3LoadSdfCommandInit2(commandHandle, fileName.c_str());
 
-						if (grpcCmd.hasUseMultiBody_case() == ::pybullet_grpc::LoadSdfCommand::HasUseMultiBodyCase::kUseMultiBody)
+						if (grpcCmd.hasUseMultiBody_case() == ::pycram_bullet_grpc::LoadSdfCommand::HasUseMultiBodyCase::kUseMultiBody)
 						{
 							b3LoadSdfCommandSetUseMultiBody(commandHandle, grpcCmd.usemultibody());
 						}
-						if (grpcCmd.hasGlobalScaling_case() == ::pybullet_grpc::LoadSdfCommand::HasGlobalScalingCase::kGlobalScaling)
+						if (grpcCmd.hasGlobalScaling_case() == ::pycram_bullet_grpc::LoadSdfCommand::HasGlobalScalingCase::kGlobalScaling)
 						{
 							b3LoadSdfCommandSetUseGlobalScaling(commandHandle, grpcCmd.globalscaling());
 						}
@@ -1098,7 +1098,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				btAssert(grpcCommand.has_loadmjcfcommand());
 				if (grpcCommand.has_loadmjcfcommand())
 				{
-					const pybullet_grpc::LoadMjcfCommand& grpcCmd = grpcCommand.loadmjcfcommand();
+					const pycram_bullet_grpc::LoadMjcfCommand& grpcCmd = grpcCommand.loadmjcfcommand();
 
 					std::string fileName = grpcCmd.filename();
 					if (fileName.length())
@@ -1123,68 +1123,68 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				{
 					cmdPtr = &cmd;
 					b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
-					const ::pybullet_grpc::ChangeDynamicsCommand& grpcCmd = grpcCommand.changedynamicscommand();
+					const ::pycram_bullet_grpc::ChangeDynamicsCommand& grpcCmd = grpcCommand.changedynamicscommand();
 					int bodyUniqueId = grpcCmd.bodyuniqueid();
 					int linkIndex = grpcCmd.linkindex();
 					b3InitChangeDynamicsInfo2(commandHandle);
-					if (grpcCmd.hasMass_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasMassCase::kMass)
+					if (grpcCmd.hasMass_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasMassCase::kMass)
 					{
 						b3ChangeDynamicsInfoSetMass(commandHandle, bodyUniqueId, linkIndex, grpcCmd.mass());
 					}
-					if (grpcCmd.hasLateralFriction_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasLateralFrictionCase::kLateralFriction)
+					if (grpcCmd.hasLateralFriction_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasLateralFrictionCase::kLateralFriction)
 					{
 						b3ChangeDynamicsInfoSetLateralFriction(commandHandle, bodyUniqueId, linkIndex, grpcCmd.lateralfriction());
 					}
-					if (grpcCmd.hasSpinningFriction_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasSpinningFrictionCase::kSpinningFriction)
+					if (grpcCmd.hasSpinningFriction_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasSpinningFrictionCase::kSpinningFriction)
 					{
 						b3ChangeDynamicsInfoSetSpinningFriction(commandHandle, bodyUniqueId, linkIndex, grpcCmd.spinningfriction());
 					}
-					if (grpcCmd.hasRollingFriction_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasRollingFrictionCase::kRollingFriction)
+					if (grpcCmd.hasRollingFriction_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasRollingFrictionCase::kRollingFriction)
 					{
 						b3ChangeDynamicsInfoSetRollingFriction(commandHandle, bodyUniqueId, linkIndex, grpcCmd.rollingfriction());
 					}
 
-					if (grpcCmd.hasRestitution_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasRestitutionCase::kRestitution)
+					if (grpcCmd.hasRestitution_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasRestitutionCase::kRestitution)
 					{
 						b3ChangeDynamicsInfoSetRestitution(commandHandle, bodyUniqueId, linkIndex, grpcCmd.restitution());
 					}
-					if (grpcCmd.haslinearDamping_case() == ::pybullet_grpc::ChangeDynamicsCommand::HaslinearDampingCase::kLinearDamping)
+					if (grpcCmd.haslinearDamping_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HaslinearDampingCase::kLinearDamping)
 					{
 						b3ChangeDynamicsInfoSetLinearDamping(commandHandle, bodyUniqueId, grpcCmd.lineardamping());
 					}
 
-					if (grpcCmd.hasangularDamping_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasangularDampingCase::kAngularDamping)
+					if (grpcCmd.hasangularDamping_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasangularDampingCase::kAngularDamping)
 					{
 						b3ChangeDynamicsInfoSetAngularDamping(commandHandle, bodyUniqueId, grpcCmd.angulardamping());
 					}
 
-					bool hasContactDamping = grpcCmd.hasContactDamping_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasContactDampingCase::kContactDamping;
-					bool hasContactStiffness = grpcCmd.hasContactStiffness_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasContactStiffnessCase::kContactStiffness;
+					bool hasContactDamping = grpcCmd.hasContactDamping_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasContactDampingCase::kContactDamping;
+					bool hasContactStiffness = grpcCmd.hasContactStiffness_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasContactStiffnessCase::kContactStiffness;
 					if (hasContactDamping && hasContactStiffness)
 					{
 						b3ChangeDynamicsInfoSetContactStiffnessAndDamping(commandHandle, bodyUniqueId, linkIndex, grpcCmd.contactstiffness(), grpcCmd.contactdamping());
 					}
-					if (grpcCmd.hasLocalInertiaDiagonal_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasLocalInertiaDiagonalCase::kLocalInertiaDiagonal)
+					if (grpcCmd.hasLocalInertiaDiagonal_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasLocalInertiaDiagonalCase::kLocalInertiaDiagonal)
 					{
 						double localInertiaDiag[3] = {grpcCmd.localinertiadiagonal().x(), grpcCmd.localinertiadiagonal().y(), grpcCmd.localinertiadiagonal().z()};
 						b3ChangeDynamicsInfoSetLocalInertiaDiagonal(commandHandle, bodyUniqueId, linkIndex, localInertiaDiag);
 					}
 
-					if (grpcCmd.hasFrictionAnchor_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasFrictionAnchorCase::kFrictionAnchor)
+					if (grpcCmd.hasFrictionAnchor_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasFrictionAnchorCase::kFrictionAnchor)
 					{
 						b3ChangeDynamicsInfoSetFrictionAnchor(commandHandle, bodyUniqueId, linkIndex, grpcCmd.frictionanchor());
 					}
-					if (grpcCmd.hasccdSweptSphereRadius_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasccdSweptSphereRadiusCase::kCcdSweptSphereRadius)
+					if (grpcCmd.hasccdSweptSphereRadius_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasccdSweptSphereRadiusCase::kCcdSweptSphereRadius)
 					{
 						b3ChangeDynamicsInfoSetCcdSweptSphereRadius(commandHandle, bodyUniqueId, linkIndex, grpcCmd.ccdsweptsphereradius());
 					}
 
-					if (grpcCmd.hasContactProcessingThreshold_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasContactProcessingThresholdCase::kContactProcessingThreshold)
+					if (grpcCmd.hasContactProcessingThreshold_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasContactProcessingThresholdCase::kContactProcessingThreshold)
 					{
 						b3ChangeDynamicsInfoSetContactProcessingThreshold(commandHandle, bodyUniqueId, linkIndex, grpcCmd.contactprocessingthreshold());
 					}
 
-					if (grpcCmd.hasActivationState_case() == ::pybullet_grpc::ChangeDynamicsCommand::HasActivationStateCase::kActivationState)
+					if (grpcCmd.hasActivationState_case() == ::pycram_bullet_grpc::ChangeDynamicsCommand::HasActivationStateCase::kActivationState)
 					{
 						b3ChangeDynamicsInfoSetActivationState(commandHandle, bodyUniqueId, grpcCmd.activationstate());
 					}
@@ -1198,7 +1198,7 @@ SharedMemoryCommand* convertGRPCToBulletCommand(const PyBulletCommand& grpcComma
 				{
 					cmdPtr = &cmd;
 					b3SharedMemoryCommandHandle commandHandle = (b3SharedMemoryCommandHandle)cmdPtr;
-					const ::pybullet_grpc::GetDynamicsCommand& grpcCmd = grpcCommand.getdynamicscommand();
+					const ::pycram_bullet_grpc::GetDynamicsCommand& grpcCmd = grpcCommand.getdynamicscommand();
 					b3GetDynamicsInfoCommandInit2(commandHandle, grpcCmd.bodyuniqueid(), grpcCmd.linkindex());
 				}
 				break;
@@ -1250,7 +1250,7 @@ bool convertGRPCToStatus(const PyBulletStatus& grpcReply, SharedMemoryStatus& se
 		case CMD_ACTUAL_STATE_UPDATE_COMPLETED:
 		{
 			converted = true;
-			const ::pybullet_grpc::SendActualStateStatus* stat = &grpcReply.actualstatestatus();
+			const ::pycram_bullet_grpc::SendActualStateStatus* stat = &grpcReply.actualstatestatus();
 			serverStatus.m_sendActualStateArgs.m_bodyUniqueId = stat->bodyuniqueid();
 			int numLinks = stat->numlinks();
 			serverStatus.m_sendActualStateArgs.m_numLinks = numLinks;
@@ -1301,13 +1301,13 @@ bool convertGRPCToStatus(const PyBulletStatus& grpcReply, SharedMemoryStatus& se
 		case CMD_REQUEST_KEYBOARD_EVENTS_DATA_COMPLETED:
 		{
 			converted = true;
-			const ::pybullet_grpc::KeyboardEventsStatus* keys = &grpcReply.keyboardeventsstatus();
+			const ::pycram_bullet_grpc::KeyboardEventsStatus* keys = &grpcReply.keyboardeventsstatus();
 
 			serverStatus.m_sendKeyboardEvents.m_numKeyboardEvents = keys->keyboardevents_size();
 
 			for (int i = 0; i < serverStatus.m_sendKeyboardEvents.m_numKeyboardEvents; i++)
 			{
-				const ::pybullet_grpc::KeyboardEvent* key = &keys->keyboardevents(i);
+				const ::pycram_bullet_grpc::KeyboardEvent* key = &keys->keyboardevents(i);
 				serverStatus.m_sendKeyboardEvents.m_keyboardEvents[i].m_keyCode = key->keycode();
 				serverStatus.m_sendKeyboardEvents.m_keyboardEvents[i].m_keyState = key->keystate();
 			}
@@ -1317,7 +1317,7 @@ bool convertGRPCToStatus(const PyBulletStatus& grpcReply, SharedMemoryStatus& se
 
 		case CMD_REQUEST_PHYSICS_SIMULATION_PARAMETERS_COMPLETED:
 		{
-			const ::pybullet_grpc::PhysicsSimulationParameters* params = &grpcReply.requestphysicssimulationparametersstatus();
+			const ::pycram_bullet_grpc::PhysicsSimulationParameters* params = &grpcReply.requestphysicssimulationparametersstatus();
 			serverStatus.m_simulationParameterResultArgs.m_allowedCcdPenetration = params->allowedccdpenetration();
 			serverStatus.m_simulationParameterResultArgs.m_collisionFilterMode = params->collisionfiltermode();
 			serverStatus.m_simulationParameterResultArgs.m_constraintSolverType = params->constraintsolvertype();
@@ -1416,7 +1416,7 @@ bool convertGRPCToStatus(const PyBulletStatus& grpcReply, SharedMemoryStatus& se
 		case CMD_SDF_LOADING_COMPLETED:
 		{
 			converted = true;
-      const ::pybullet_grpc::SdfLoadedStatus* stat = &grpcReply.sdfstatus();
+      const ::pycram_bullet_grpc::SdfLoadedStatus* stat = &grpcReply.sdfstatus();
       int numBodies = stat->bodyuniqueids_size();
       if (numBodies > MAX_SDF_BODIES)
 			{
@@ -1436,7 +1436,7 @@ bool convertGRPCToStatus(const PyBulletStatus& grpcReply, SharedMemoryStatus& se
 		}
 		case CMD_USER_CONSTRAINT_COMPLETED:
 		{
-			const ::pybullet_grpc::UserConstraintStatus* con = &grpcReply.userconstraintstatus();
+			const ::pycram_bullet_grpc::UserConstraintStatus* con = &grpcReply.userconstraintstatus();
 			serverStatus.m_userConstraintResultArgs.m_userConstraintUniqueId = con->userconstraintuniqueid();
 			serverStatus.m_userConstraintResultArgs.m_maxAppliedForce = con->maxappliedforce();
 			converted = true;
@@ -1455,7 +1455,7 @@ bool convertGRPCToStatus(const PyBulletStatus& grpcReply, SharedMemoryStatus& se
 		case CMD_CAMERA_IMAGE_COMPLETED:
 		{
 			converted = true;
-			const ::pybullet_grpc::RequestCameraImageStatus* cam = &grpcReply.requestcameraimagestatus();
+			const ::pycram_bullet_grpc::RequestCameraImageStatus* cam = &grpcReply.requestcameraimagestatus();
 			serverStatus.m_sendPixelDataArguments.m_imageWidth = cam->imagewidth();
 			serverStatus.m_sendPixelDataArguments.m_imageHeight = cam->imageheight();
 			serverStatus.m_sendPixelDataArguments.m_numPixelsCopied = cam->numpixelscopied();
@@ -1466,7 +1466,7 @@ bool convertGRPCToStatus(const PyBulletStatus& grpcReply, SharedMemoryStatus& se
 		case CMD_GET_DYNAMICS_INFO_COMPLETED:
 		{
 			converted = true;
-			const ::pybullet_grpc::GetDynamicsStatus* stat = &grpcReply.getdynamicsstatus();
+			const ::pycram_bullet_grpc::GetDynamicsStatus* stat = &grpcReply.getdynamicsstatus();
 			serverStatus.m_dynamicsInfo.m_mass = stat->mass();
 			serverStatus.m_dynamicsInfo.m_lateralFrictionCoeff = stat->lateralfriction();
 			serverStatus.m_dynamicsInfo.m_spinningFrictionCoeff = stat->spinningfriction();
@@ -1540,11 +1540,11 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 		case CMD_REQUEST_KEYBOARD_EVENTS_DATA_COMPLETED:
 		{
 			converted = true;
-			::pybullet_grpc::KeyboardEventsStatus* keys = grpcReply.mutable_keyboardeventsstatus();
+			::pycram_bullet_grpc::KeyboardEventsStatus* keys = grpcReply.mutable_keyboardeventsstatus();
 
 			for (int i = 0; i < serverStatus.m_sendKeyboardEvents.m_numKeyboardEvents; i++)
 			{
-				::pybullet_grpc::KeyboardEvent* key = keys->add_keyboardevents();
+				::pycram_bullet_grpc::KeyboardEvent* key = keys->add_keyboardevents();
 				key->set_keycode(serverStatus.m_sendKeyboardEvents.m_keyboardEvents[i].m_keyCode);
 				key->set_keystate(serverStatus.m_sendKeyboardEvents.m_keyboardEvents[i].m_keyState);
 			}
@@ -1553,7 +1553,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 		}
 		case CMD_REQUEST_PHYSICS_SIMULATION_PARAMETERS_COMPLETED:
 		{
-			::pybullet_grpc::PhysicsSimulationParameters* params = grpcReply.mutable_requestphysicssimulationparametersstatus();
+			::pycram_bullet_grpc::PhysicsSimulationParameters* params = grpcReply.mutable_requestphysicssimulationparametersstatus();
 			params->set_allowedccdpenetration(serverStatus.m_simulationParameterResultArgs.m_allowedCcdPenetration);
 			params->set_collisionfiltermode(serverStatus.m_simulationParameterResultArgs.m_collisionFilterMode);
 			params->set_constraintsolvertype(serverStatus.m_simulationParameterResultArgs.m_constraintSolverType);
@@ -1569,7 +1569,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 			params->set_enablesat(serverStatus.m_simulationParameterResultArgs.m_enableSAT);
 			params->set_frictioncfm(serverStatus.m_simulationParameterResultArgs.m_frictionCFM);
 			params->set_frictionerp(serverStatus.m_simulationParameterResultArgs.m_frictionERP);
-			::pybullet_grpc::vec3* grav = params->mutable_gravityacceleration();
+			::pycram_bullet_grpc::vec3* grav = params->mutable_gravityacceleration();
 			grav->set_x(serverStatus.m_simulationParameterResultArgs.m_gravityAcceleration[0]);
 			grav->set_y(serverStatus.m_simulationParameterResultArgs.m_gravityAcceleration[1]);
 			grav->set_z(serverStatus.m_simulationParameterResultArgs.m_gravityAcceleration[2]);
@@ -1590,14 +1590,14 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 		case CMD_BODY_INFO_COMPLETED:
 		{
 			converted = true;
-			::pybullet_grpc::RequestBodyInfoStatus* stat = grpcReply.mutable_requestbodyinfostatus();
+			::pycram_bullet_grpc::RequestBodyInfoStatus* stat = grpcReply.mutable_requestbodyinfostatus();
 			stat->set_bodyuniqueid(serverStatus.m_dataStreamArguments.m_bodyUniqueId);
 			stat->set_bodyname(serverStatus.m_dataStreamArguments.m_bodyName);
 			break;
 		}
 		case CMD_SYNC_BODY_INFO_COMPLETED:
 		{
-			::pybullet_grpc::SyncBodiesStatus* stat = grpcReply.mutable_syncbodiesstatus();
+			::pycram_bullet_grpc::SyncBodiesStatus* stat = grpcReply.mutable_syncbodiesstatus();
 
 			for (int i = 0; i < serverStatus.m_sdfLoadedArgs.m_numBodies; i++)
 			{
@@ -1620,7 +1620,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 		case CMD_URDF_LOADING_COMPLETED:
 		{
 			converted = true;
-			::pybullet_grpc::LoadUrdfStatus* stat = grpcReply.mutable_urdfstatus();
+			::pycram_bullet_grpc::LoadUrdfStatus* stat = grpcReply.mutable_urdfstatus();
 			b3SharedMemoryStatusHandle statusHandle = (b3SharedMemoryStatusHandle)&serverStatus;
 			int objectUniqueId = b3GetStatusBodyIndex(statusHandle);
 			stat->set_bodyuniqueid(objectUniqueId);
@@ -1631,7 +1631,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 		{
 			converted = true;
 			int bodyIndicesOut[MAX_SDF_BODIES];
-			::pybullet_grpc::SdfLoadedStatus* stat = grpcReply.mutable_sdfstatus();
+			::pycram_bullet_grpc::SdfLoadedStatus* stat = grpcReply.mutable_sdfstatus();
 			b3SharedMemoryStatusHandle statusHandle = (b3SharedMemoryStatusHandle)&serverStatus;
 			int numBodies = b3GetStatusBodyIndices(statusHandle, bodyIndicesOut, MAX_SDF_BODIES);
 			if (numBodies > MAX_SDF_BODIES)
@@ -1648,7 +1648,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 		{
 			converted = true;
 			int bodyIndicesOut[MAX_SDF_BODIES];
-			::pybullet_grpc::MjcfLoadedStatus* stat = grpcReply.mutable_mjcfstatus();
+			::pycram_bullet_grpc::MjcfLoadedStatus* stat = grpcReply.mutable_mjcfstatus();
 			b3SharedMemoryStatusHandle statusHandle = (b3SharedMemoryStatusHandle)&serverStatus;
 			int numBodies = b3GetStatusBodyIndices(statusHandle, bodyIndicesOut, MAX_SDF_BODIES);
 			if (numBodies > MAX_SDF_BODIES)
@@ -1668,7 +1668,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 			b3SharedMemoryStatusHandle statusHandle = (b3SharedMemoryStatusHandle)&serverStatus;
 			if (b3GetDynamicsInfo(statusHandle, &info))
 			{
-				::pybullet_grpc::GetDynamicsStatus* stat = grpcReply.mutable_getdynamicsstatus();
+				::pycram_bullet_grpc::GetDynamicsStatus* stat = grpcReply.mutable_getdynamicsstatus();
 
 				stat->set_mass(info.m_mass);
 				stat->set_lateralfriction(info.m_lateralFrictionCoeff);
@@ -1681,7 +1681,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 				stat->set_contactstiffness(info.m_contactStiffness);
 				stat->set_contactdamping(info.m_contactDamping);
 
-				pybullet_grpc::vec3* localInertia = stat->mutable_localinertiadiagonal();
+				pycram_bullet_grpc::vec3* localInertia = stat->mutable_localinertiadiagonal();
 				localInertia->set_x(info.m_localInertialDiagonal[0]);
 				localInertia->set_y(info.m_localInertialDiagonal[1]);
 				localInertia->set_z(info.m_localInertialDiagonal[2]);
@@ -1730,7 +1730,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 					&linkStates,
 					&linkWorldVelocities))
 			{
-				::pybullet_grpc::SendActualStateStatus* stat = grpcReply.mutable_actualstatestatus();
+				::pycram_bullet_grpc::SendActualStateStatus* stat = grpcReply.mutable_actualstatestatus();
 				stat->set_bodyuniqueid(bodyUniqueId);
 				stat->set_numlinks(numLinks);
 
@@ -1784,7 +1784,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 		}
 		case CMD_USER_CONSTRAINT_COMPLETED:
 		{
-			::pybullet_grpc::UserConstraintStatus* con = grpcReply.mutable_userconstraintstatus();
+			::pycram_bullet_grpc::UserConstraintStatus* con = grpcReply.mutable_userconstraintstatus();
 			con->set_userconstraintuniqueid(serverStatus.m_userConstraintResultArgs.m_userConstraintUniqueId);
 			con->set_maxappliedforce(serverStatus.m_userConstraintResultArgs.m_maxAppliedForce);
 			converted = true;
@@ -1803,7 +1803,7 @@ bool convertStatusToGRPC(const SharedMemoryStatus& serverStatus, char* bufferSer
 		case CMD_CAMERA_IMAGE_COMPLETED:
 		{
 			converted = true;
-			::pybullet_grpc::RequestCameraImageStatus* cam = grpcReply.mutable_requestcameraimagestatus();
+			::pycram_bullet_grpc::RequestCameraImageStatus* cam = grpcReply.mutable_requestcameraimagestatus();
 			cam->set_imagewidth(serverStatus.m_sendPixelDataArguments.m_imageWidth);
 			cam->set_imageheight(serverStatus.m_sendPixelDataArguments.m_imageHeight);
 			cam->set_numpixelscopied(serverStatus.m_sendPixelDataArguments.m_numPixelsCopied);

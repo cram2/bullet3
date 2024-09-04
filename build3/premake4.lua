@@ -90,7 +90,7 @@
 	newoption
 	{
 		trigger = "enable_physx",
-		description = "Allow optional PhysX backend for PyBullet, use pybullet.connect(pybullet.PhysX)."
+		description = "Allow optional PhysX backend for PyBullet, use pycram_bullet.connect(pycram_bullet.PhysX)."
 	}
 
 	newoption
@@ -249,10 +249,10 @@
       files { 
       projectRootDir .. "examples/SharedMemory/grpc/ConvertGRPCBullet.cpp",
 			projectRootDir .. "examples/SharedMemory/grpc/ConvertGRPCBullet.h",
-			projectRootDir .. "examples/SharedMemory/grpc/proto/pybullet.grpc.pb.cpp",
-			projectRootDir .. "examples/SharedMemory/grpc/proto/pybullet.grpc.pb.h",
-			projectRootDir .. "examples/SharedMemory/grpc/proto/pybullet.pb.cpp",
-			projectRootDir .. "examples/SharedMemory/grpc/proto/pybullet.pb.h", }
+			projectRootDir .. "examples/SharedMemory/grpc/proto/pycram_bullet.grpc.pb.cpp",
+			projectRootDir .. "examples/SharedMemory/grpc/proto/pycram_bullet.grpc.pb.h",
+			projectRootDir .. "examples/SharedMemory/grpc/proto/pycram_bullet.pb.cpp",
+			projectRootDir .. "examples/SharedMemory/grpc/proto/pycram_bullet.pb.h", }
 		end
 
 	end
@@ -280,14 +280,14 @@
 	newoption
 	{
 		trigger = "no-clsocket",
-		description = "Disable clsocket and clsocket tests (used for optional TCP networking in pybullet and shared memory C-API)"
+		description = "Disable clsocket and clsocket tests (used for optional TCP networking in pycram_bullet and shared memory C-API)"
 	}
 
 
 	newoption
 	{
 		trigger = "no-enet",
-		description = "Disable enet and enet tests (used for optional UDP networking in pybullet and shared memory C-API)"
+		description = "Disable enet and enet tests (used for optional UDP networking in pycram_bullet and shared memory C-API)"
 	}
 
 	newoption
@@ -298,7 +298,7 @@
 
 	newoption
         {
-                trigger = "enable_pybullet",
+                trigger = "enable_pycram_bullet",
                 description = "Enable high-level Python scripting of Bullet with URDF/SDF import and synthetic camera."
         }
 
@@ -613,8 +613,8 @@ end
 		if _OPTIONS["lua"] then
 		   include "../examples/ThirdPartyLibs/lua-5.2.3"
 		end
-		if _OPTIONS["enable_pybullet"] then
-		  include "../examples/pybullet"
+		if _OPTIONS["enable_pycram_bullet"] then
+		  include "../examples/pycram_bullet"
 		end
 		include "../examples/SimpleOpenGL3"
 

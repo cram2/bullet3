@@ -1,6 +1,6 @@
 		
 
-project ("pybullet_testplugin")
+project ("pycram_bullet_testplugin")
 		language "C++"
 		kind "SharedLib"
 		

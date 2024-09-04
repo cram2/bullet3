@@ -21,7 +21,7 @@
 #include "../CommonInterfaces/CommonParameterInterface.h"
 #include "../Importers/ImportURDFDemo/urdfStringSplit.h"
 
-//@todo(erwincoumans) those globals are hacks for a VR demo, move this to Python/pybullet!
+//@todo(erwincoumans) those globals are hacks for a VR demo, move this to Python/pycram_bullet!
 bool gEnablePicking = true;
 bool gEnableTeleporting = true;
 bool gEnableRendering = true;

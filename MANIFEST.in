@@ -7,7 +7,7 @@ recursive-include Extras *.inl
 recursive-include src *.h
 recursive-include src *.hpp
 recursive-include src *.cpp
-recursive-include examples/pybullet/gym *.*
+recursive-include examples/pycram_bullet/gym *.*
 include examples/ThirdPartyLibs/enet/unix.c
 include examples/OpenGLWindow/*.*
 recursive-include examples/SharedMemory/plugins *.*

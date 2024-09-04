@@ -3,7 +3,7 @@
 //and set change the user constraint to match the pose
 
 //in Python you can load and configure the plugin like this:
-//plugin = p.loadPlugin("e:/develop/bullet3/bin/pybullet_vrSyncPlugin_vs2010_x64_release.dll")
+//plugin = p.loadPlugin("e:/develop/bullet3/bin/pycram_bullet_vrSyncPlugin_vs2010_x64_release.dll")
 //could also be plugin = p.loadPlugin("vrSyncPlugin.so") on Mac/Linux
 //controllerId = 3
 
@@ -63,7 +63,7 @@ B3_SHARED_API int preTickPluginCallback_vrSyncPlugin(struct b3PluginContext* con
 							struct b3UserConstraint constraintInfo;
 							if (b3GetUserConstraintInfo(context->m_physClient, obj->m_constraintId, &constraintInfo))
 							{
-								//this is basically equivalent to doing this in Python/pybullet:
+								//this is basically equivalent to doing this in Python/pycram_bullet:
 								//p.changeConstraint(pr2_cid, e[POSITION], e[ORIENTATION], maxForce=...)
 								b3SharedMemoryCommandHandle commandHandle;
 								int userConstraintUniqueId = obj->m_constraintId;

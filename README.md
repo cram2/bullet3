@@ -8,20 +8,20 @@
 
 This is the official C++ source code repository of the Bullet Physics SDK: real-time collision detection and multi-physics simulation for VR, games, visual effects, robotics, machine learning etc.
 
-![PyBullet](https://pybullet.org/wordpress/wp-content/uploads/2019/03/cropped-pybullet.png)
+![PyBullet](https://pycram_bullet.org/wordpress/wp-content/uploads/2019/03/cropped-pycram_bullet.png)
 
 ## Issues ##
-The Issue tracker was flooded with support questions and is closed until it is cleaned up. Use the [PyBullet forums](http://pybullet.org) to discuss with others.
+The Issue tracker was flooded with support questions and is closed until it is cleaned up. Use the [PyBullet forums](http://pycram_bullet.org) to discuss with others.
 
 ## PyBullet ##
-It is highly recommended to use PyBullet Python bindings for improved support for robotics, reinforcement learning and VR. Use pip install pybullet and checkout the [PyBullet Quickstart Guide](https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit#heading=h.2ye70wns7io3).
+It is highly recommended to use PyBullet Python bindings for improved support for robotics, reinforcement learning and VR. Use pip install pycram_bullet and checkout the [PyBullet Quickstart Guide](https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA/edit#heading=h.2ye70wns7io3).
 
 Installation is simple:
 ```
-pip3 install pybullet --upgrade --user
-python3 -m pybullet_envs.examples.enjoy_TF_AntBulletEnv_v0_2017may
-python3 -m pybullet_envs.examples.enjoy_TF_HumanoidFlagrunHarderBulletEnv_v1_2017jul
-python3 -m pybullet_envs.deep_mimic.testrl --arg_file run_humanoid3d_backflip_args.txt
+pip3 install pycram_bullet --upgrade --user
+python3 -m pycram_bullet_envs.examples.enjoy_TF_AntBulletEnv_v0_2017may
+python3 -m pycram_bullet_envs.examples.enjoy_TF_HumanoidFlagrunHarderBulletEnv_v1_2017jul
+python3 -m pycram_bullet_envs.deep_mimic.testrl --arg_file run_humanoid3d_backflip_args.txt
 ```
 
 If you use PyBullet in your research, please cite it like this:
@@ -30,7 +30,7 @@ If you use PyBullet in your research, please cite it like this:
 @MISC{coumans2021,
 author =   {Erwin Coumans and Yunfei Bai},
 title =    {PyBullet, a Python module for physics simulation for games, robotics and machine learning},
-howpublished = {\url{http://pybullet.org}},
+howpublished = {\url{http://pycram_bullet.org}},
 year = {2016--2021}
 }
 ```
@@ -77,7 +77,7 @@ The Bullet port in vcpkg is kept up to date by Microsoft team members and commun
 
 **Windows**
 
-Click on build_visual_studio_vr_pybullet_double.bat and open build3/vs2010/0_Bullet3Solution.sln
+Click on build_visual_studio_vr_pycram_bullet_double.bat and open build3/vs2010/0_Bullet3Solution.sln
 When asked, convert the projects to a newer version of Visual Studio.
 If you installed Python in the C:\ root directory, the batch file should find it automatically.
 Otherwise, edit this batch file to choose where Python include/lib directories are located.
@@ -85,10 +85,10 @@ Otherwise, edit this batch file to choose where Python include/lib directories a
 **Windows Virtual Reality sandbox for HTC Vive and Oculus Rift**
 
 Build and run the App_SharedMemoryPhysics_VR project, preferably in Release/optimized build.
-You can connect from Python pybullet to the sandbox using:
+You can connect from Python pycram_bullet to the sandbox using:
 
 ```
-import pybullet as p
+import pycram_bullet as p
 p.connect(p.SHARED_MEMORY) #or (p.TCP, "localhost", 6667) or (p.UDP, "192.168.86.10",1234)
 ```
 
@@ -98,9 +98,9 @@ Make sure gcc and cmake is installed (`sudo apt-get install build-essential` and
 
 In a terminal type:
 ```
-./build_cmake_pybullet_double.sh
+./build_cmake_pycram_bullet_double.sh
 ```
-This script will invoke cmake and build in the build_cmake directory. You can find pybullet in Bullet/examples/pybullet.
+This script will invoke cmake and build in the build_cmake directory. You can find pycram_bullet in Bullet/examples/pycram_bullet.
 The BulletExampleBrowser binary will be in Bullet/examples/ExampleBrowser.
 
 You can also build Bullet using premake. There are premake executables in the build3 folder.
@@ -110,7 +110,7 @@ Using premake:
 cd build3
 ./premake4_linux --double gmake
 ./premake4_linux64 --double gmake
-./premake4_osx --double --enable_pybullet gmake
+./premake4_osx --double --enable_pycram_bullet gmake
 ```
 Then
 ```
@@ -118,7 +118,7 @@ cd gmake
 make
 ```
 
-Note that on Linux, you need to use cmake to build pybullet, since the compiler has issues of mixing shared and static libraries.
+Note that on Linux, you need to use cmake to build pycram_bullet, since the compiler has issues of mixing shared and static libraries.
 
 **Mac OSX Xcode**
 

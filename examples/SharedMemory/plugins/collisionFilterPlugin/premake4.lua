@@ -1,6 +1,6 @@
 		
 
-project ("pybullet_collisionFilterPlugin")
+project ("pycram_bullet_collisionFilterPlugin")
 		language "C++"
 		kind "SharedLib"
 		

@@ -164,7 +164,7 @@ bool b3RobotSimulatorClientAPI::connect(int mode, const std::string& hostName, i
 
 			sm = b3ConnectPhysicsTCP(hostName.c_str(), tcpPort);
 #else
-			b3Warning("TCP is not enabled in this pybullet build");
+			b3Warning("TCP is not enabled in this pycram_bullet build");
 #endif  //BT_ENABLE_CLSOCKET
 			break;
 		}
@@ -173,7 +173,7 @@ bool b3RobotSimulatorClientAPI::connect(int mode, const std::string& hostName, i
 #ifdef BT_ENABLE_GRPC
 			sm = b3ConnectPhysicsGRPC(hostName.c_str(), tcpPort);
 #else
-			b3Warning("GRPC is not enabled in this pybullet build");
+			b3Warning("GRPC is not enabled in this pycram_bullet build");
 #endif
 			break;
 		}

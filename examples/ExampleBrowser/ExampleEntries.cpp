@@ -170,7 +170,7 @@ static ExampleEntry gDefaultExamples[] =
     ExampleEntry(1, "Kinematic MultiBody", "Let the user set the transform, the physics engine computes the velocity for one-way contact and friction interaction.", KinematicMultiBodyExampleCreateFunc),
 
 		ExampleEntry(0, "Physics Client-Server"),
-		ExampleEntry(1, "Physics Server", "Create a physics server that communicates with a physics client over shared memory. You can connect to the server using pybullet, a PhysicsClient or a UDP/TCP Bridge.",
+		ExampleEntry(1, "Physics Server", "Create a physics server that communicates with a physics client over shared memory. You can connect to the server using pycram_bullet, a PhysicsClient or a UDP/TCP Bridge.",
 					 PhysicsServerCreateFuncBullet2),
 		ExampleEntry(1, "Physics Client (Shared Mem)", "Create a physics client that can communicate with a physics server over shared memory.", PhysicsClientCreateFunc),
 

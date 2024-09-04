@@ -1,4 +1,4 @@
-import pybullet as p
+import pycram_bullet as p
 p.connect(p.DIRECT)
 p.loadPlugin("eglRendererPlugin")
 p.loadSDF("newsdf.sdf")

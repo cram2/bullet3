@@ -1,6 +1,6 @@
 		
 
-project ("pybullet_grpcPlugin")
+project ("pycram_bullet_grpcPlugin")
 		language "C++"
 		kind "SharedLib"
 		

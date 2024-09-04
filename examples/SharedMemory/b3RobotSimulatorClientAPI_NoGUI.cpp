@@ -82,7 +82,7 @@ bool b3RobotSimulatorClientAPI_NoGUI::connect(int mode, const std::string& hostN
 
 			sm = b3ConnectPhysicsTCP(hostName.c_str(), tcpPort);
 #else
-			b3Warning("TCP is not enabled in this pybullet build");
+			b3Warning("TCP is not enabled in this pycram_bullet build");
 #endif  //BT_ENABLE_CLSOCKET
 			break;
 		}

@@ -1061,7 +1061,7 @@ void EGLRendererVisualShapeConverter::updateShape(int shapeUniqueId, const btVec
 
 
 // If you are getting segfaults in this function it may be ecause you are
-// compliling the plugin with differently from pybullet, try compiling the
+// compliling the plugin with differently from pycram_bullet, try compiling the
 // plugin with distutils too.
 int EGLRendererVisualShapeConverter::convertVisualShapes(
 	int linkIndex, const char* pathPrefix, const btTransform& localInertiaFrame,

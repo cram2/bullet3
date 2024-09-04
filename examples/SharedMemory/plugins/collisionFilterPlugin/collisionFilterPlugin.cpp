@@ -1,7 +1,7 @@
 
 //tinyRendererPlugin implements the TinyRenderer as a plugin
 //it is statically linked when using preprocessor #define STATIC_LINK_VR_PLUGIN
-//otherwise you can dynamically load it using pybullet.loadPlugin
+//otherwise you can dynamically load it using pycram_bullet.loadPlugin
 
 #include "collisionFilterPlugin.h"
 #include "../../SharedMemoryPublic.h"

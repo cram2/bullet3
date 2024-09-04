@@ -1,6 +1,6 @@
 		
 
-project ("pybullet_tinyRendererPlugin")
+project ("pycram_bullet_tinyRendererPlugin")
 		language "C++"
 		kind "SharedLib"
 		

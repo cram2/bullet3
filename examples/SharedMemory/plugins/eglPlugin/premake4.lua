@@ -1,6 +1,6 @@
 		
 
-project ("pybullet_eglRendererPlugin")
+project ("pycram_bullet_eglRendererPlugin")
 		language "C++"
 		kind "SharedLib"
 		initEGL()

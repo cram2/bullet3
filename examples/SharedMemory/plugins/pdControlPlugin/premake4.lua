@@ -1,6 +1,6 @@
 		
 
-project ("pybullet_pdControlPlugin")
+project ("pycram_bullet_pdControlPlugin")
 		language "C++"
 		kind "SharedLib"
 		

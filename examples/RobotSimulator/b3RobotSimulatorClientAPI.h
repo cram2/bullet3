@@ -3,8 +3,8 @@
 
 #include "../SharedMemory/b3RobotSimulatorClientAPI_NoGUI.h"
 
-///The b3RobotSimulatorClientAPI_GUI is pretty much the C++ version of pybullet
-///as documented in the pybullet Quickstart Guide
+///The b3RobotSimulatorClientAPI_GUI is pretty much the C++ version of pycram_bullet
+///as documented in the pycram_bullet Quickstart Guide
 ///https://docs.google.com/document/d/10sXEhzFRSnvFcl3XxNGhnD4N2SedqwdAvK3dsihxVUA
 class b3RobotSimulatorClientAPI : public b3RobotSimulatorClientAPI_NoGUI
 {

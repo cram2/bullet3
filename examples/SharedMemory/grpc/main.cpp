@@ -27,7 +27,7 @@ typedef SharedMemoryCommandProcessor MyCommandProcessor;
 #include <grpc++/grpc++.h>
 #include <grpc/support/log.h>
 
-#include "SharedMemory/grpc/proto/pybullet.grpc.pb.h"
+#include "SharedMemory/grpc/proto/pycram_bullet.grpc.pb.h"
 
 using grpc::Server;
 using grpc::ServerAsyncResponseWriter;
@@ -35,9 +35,9 @@ using grpc::ServerBuilder;
 using grpc::ServerCompletionQueue;
 using grpc::ServerContext;
 using grpc::Status;
-using pybullet_grpc::PyBulletAPI;
-using pybullet_grpc::PyBulletCommand;
-using pybullet_grpc::PyBulletStatus;
+using pycram_bullet_grpc::PyBulletAPI;
+using pycram_bullet_grpc::PyBulletCommand;
+using pycram_bullet_grpc::PyBulletStatus;
 
 bool gVerboseNetworkMessagesServer = true;
 #include "ConvertGRPCBullet.h"

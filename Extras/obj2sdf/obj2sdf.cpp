@@ -1,7 +1,7 @@
 /// obj2sdf will load a Wavefront .obj file that may contain many parts/materials
 /// it will split into separate obj files for each part/material and
 /// create an sdf file with visuals/collisions pointing to the new obj files
-/// this will make it easier to load complex obj files into pybullet
+/// this will make it easier to load complex obj files into pycram_bullet
 /// see for example export in data/kitchens/fathirmutfak.sdf
 
 ///Bullet Continuous Collision Detection and Physics Library

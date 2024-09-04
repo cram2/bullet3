@@ -1,0 +1,4 @@
+import pycram_bullet_envs.minitaur.envs_v2.locomotion_gym_env
+import pycram_bullet_envs.minitaur.envs_v2.scenes.simple_scene
+
+locomotion_gym_env.LocomotionGymEnv.scene = @simple_scene.SimpleScene()

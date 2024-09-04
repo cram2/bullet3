@@ -1,6 +1,6 @@
 #ifdef BT_ENABLE_GRPC
 #include "PhysicsClientGRPC.h"
-#include "SharedMemory/grpc/proto/pybullet.grpc.pb.h"
+#include "SharedMemory/grpc/proto/pycram_bullet.grpc.pb.h"
 #include <grpc++/grpc++.h>
 using grpc::Channel;
 #include <stdio.h>
@@ -14,7 +14,7 @@ using grpc::Channel;
 #include "Bullet3Common/b3AlignedObjectArray.h"
 #include "SharedMemory/grpc/ConvertGRPCBullet.h"
 
-using pybullet_grpc::grpc::PyBulletAPI;
+using pycram_bullet_grpc::grpc::PyBulletAPI;
 
 static unsigned int b3DeserializeInt2(const unsigned char* input)
 {
@@ -78,10 +78,10 @@ struct GRPCNetworkedInternalData
 			std::chrono::system_clock::now() + std::chrono::seconds((long long)m_timeOutInSeconds);
 		grpc::ClientContext context;
 		context.set_deadline(deadline);
-		::pybullet_grpc::PyBulletCommand request;
-		pybullet_grpc::CheckVersionCommand* cmd1 = request.mutable_checkversioncommand();
+		::pycram_bullet_grpc::PyBulletCommand request;
+		pycram_bullet_grpc::CheckVersionCommand* cmd1 = request.mutable_checkversioncommand();
 		cmd1->set_clientversion(SHARED_MEMORY_MAGIC_NUMBER);
-		::pybullet_grpc::PyBulletStatus response;
+		::pycram_bullet_grpc::PyBulletStatus response;
 		// The actual RPC.
 		grpc::Status status = m_stub->SubmitCommand(&context, request, &response);
 		if (response.has_checkversionstatus())
@@ -133,8 +133,8 @@ bool GRPCNetworkedPhysicsProcessor::processCommand(const struct SharedMemoryComm
 		printf("GRPCNetworkedPhysicsProcessor::processCommand\n");
 	}
 
-	::pybullet_grpc::PyBulletCommand grpcCommand;
-	pybullet_grpc::PyBulletCommand* grpcCmdPtr = convertBulletToGRPCCommand(clientCmd, grpcCommand);
+	::pycram_bullet_grpc::PyBulletCommand grpcCommand;
+	pycram_bullet_grpc::PyBulletCommand* grpcCmdPtr = convertBulletToGRPCCommand(clientCmd, grpcCommand);
 
 	if (grpcCmdPtr)
 	{
@@ -142,7 +142,7 @@ bool GRPCNetworkedPhysicsProcessor::processCommand(const struct SharedMemoryComm
 		std::chrono::system_clock::time_point deadline =
 			std::chrono::system_clock::now() + std::chrono::seconds((long long)m_data->m_timeOutInSeconds);
 		context.set_deadline(deadline);
-		::pybullet_grpc::PyBulletStatus status;
+		::pycram_bullet_grpc::PyBulletStatus status;
 		// The actual RPC.
 		grpc::Status grpcStatus = m_data->m_stub->SubmitCommand(&context, grpcCommand, &status);
 
