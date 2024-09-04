@@ -27,7 +27,7 @@ jobs:
     #   run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Install Buildtools
-      run: pip install setuptools
+      run: pip install setuptools build
 
     - name: Build
       # Build your program with the given configuration
