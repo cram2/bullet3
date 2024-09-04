@@ -46,6 +46,9 @@ jobs:
 
     - name: Pubnlish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ PyPi_API_TOKEN }}
+        skip_existing: flase
 
   # pypi-publish:
   #   name: upload release to PyPI
