@@ -18,7 +18,7 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
     container:
-        image: pypa/manylinux2014_x86_64
+        image: parsely/manylinux
     permissions:
       # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write
