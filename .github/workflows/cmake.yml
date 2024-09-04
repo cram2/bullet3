@@ -27,7 +27,7 @@ jobs:
     #   run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Install Buildtools
-      run: pip install setuptools build
+      run: pip install setuptools build numpy
 
     - name: Build
       # Build your program with the given configuration
@@ -49,6 +49,7 @@ jobs:
     permissions:
       # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write
+    working-directory: ${{github.workspace}}
     steps:
       # retrieve your distributions here
 
