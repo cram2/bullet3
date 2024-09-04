@@ -47,7 +47,11 @@ jobs:
     #   run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Repair wheel
-      run: auditwheel repair dist/*.whl
+      run: |
+          auditwheel repair dist/*.whl
+          rm dist/*.whl
+          mv wheelhouse/*.whl dist/
+      
 
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
